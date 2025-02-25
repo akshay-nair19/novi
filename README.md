@@ -1,2 +1,2 @@
 # novi
-Our intelligent assistant taht can help you detect every day objects and speech 
+Our intelligent assistant that can help you detect every day objects and speech 
