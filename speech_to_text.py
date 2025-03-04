@@ -24,7 +24,7 @@ print("Waiting for wake word 'Novi'...")
 
 try:
     while True:
-        data = stream.read(4096, exception_on_overflow=False)
+        data = stream.read(256, exception_on_overflow=False)
         if recognizer.AcceptWaveform(data):
             result = json.loads(recognizer.Result())
             text = result.get("text", "").strip().lower()
