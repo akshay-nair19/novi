@@ -1,2 +1,2 @@
 # novi
-Our intelligent assistant that can help you detect every day objects and speech 
+Our intelligent clothing app that can help you put together outfits scanning your wardrobe and give you the best fashion advice
