@@ -1,16 +1,13 @@
 import cv2
 import numpy as np
-import cv2
-import numpy as np
-from PIL import Image
 import pillow_heif
+from PIL import Image
 import os
-
 
 color_dict = {
     'yellow': [np.array([25, 100, 100]),np.array([31, 255, 255])],
-    'red_low': [np.array([0, 95, 0]), np.array([9, 255, 216])],
-    'red_up': [np.array([170, 100, 70]), np.array([179, 255, 255])],    
+    'red': [np.array([0, 95, 0]), np.array([9, 255, 216])],
+    'red': [np.array([170, 100, 70]), np.array([179, 255, 255])],    
     'green': [np.array([32, 98, 50]), np.array([84, 255, 255])],
     'turquoise': [np.array([84, 140, 50]), np.array([90, 255, 255])],
     'orange': [np.array([10, 100, 120]), np.array([25, 255, 255])],
@@ -25,7 +22,7 @@ color_dict = {
     
 }
 
-def convert_heic_to_png(heic_path):
+def convert_heic_to_jpg(heic_path):
     heif_file = pillow_heif.read_heif(heic_path)
     image = Image.frombytes(
         heif_file.mode,
@@ -33,12 +30,20 @@ def convert_heic_to_png(heic_path):
         heif_file.data,
         "raw"
     )
-    png_path = heic_path.rsplit('.', 1)[0] + '.png'
-    image.save(png_path, format='PNG')
-    return png_path
+    jpg_path = heic_path + ".jpg"
+    image.save(jpg_path, "JPEG")
+    return jpg_path
 
 
 def color_dectector(img: str, color_dict:dict):
+    temp_jpg = None
+    
+    # If HEIC, convert first
+    if img.lower().endswith(".heic"):
+        temp_jpg = convert_heic_to_jpg(img)
+        img = temp_jpg
+
+    
     img = cv2.imread(img)
     if img is None:
         raise ValueError("Image not found or invalid path provided.")
@@ -63,8 +68,11 @@ def color_dectector(img: str, color_dict:dict):
                 print(f"Detected color: {color_name}")
                 detected_colors.append(color_name)
         #print(50*'-')
+
+    if temp_jpg and os.path.exists(temp_jpg):
+        os.remove(temp_jpg)
+
     return detected_colors
         
         
-print(color_dectector('wheel.png', color_dict))
-
+print(color_dectector('IMG_2106.HEIC', color_dict))
