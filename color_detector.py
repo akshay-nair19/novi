@@ -1,5 +1,10 @@
 import cv2
 import numpy as np
+import cv2
+import numpy as np
+from PIL import Image
+import pillow_heif
+import os
 
 
 color_dict = {
@@ -19,6 +24,19 @@ color_dict = {
     
     
 }
+
+def convert_heic_to_png(heic_path):
+    heif_file = pillow_heif.read_heif(heic_path)
+    image = Image.frombytes(
+        heif_file.mode,
+        heif_file.size,
+        heif_file.data,
+        "raw"
+    )
+    png_path = heic_path.rsplit('.', 1)[0] + '.png'
+    image.save(png_path, format='PNG')
+    return png_path
+
 
 def color_dectector(img: str, color_dict:dict):
     img = cv2.imread(img)
